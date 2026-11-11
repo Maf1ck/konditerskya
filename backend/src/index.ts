@@ -1,3 +1,4 @@
+import type { Express } from 'express'
 import { config, hasWeakSecrets, isProduction, onVercel } from './config.ts'
 import { createApp } from './createApp.ts'
 import { seedIfEmpty } from './seed.ts'
@@ -17,7 +18,7 @@ if (isProduction && !config.adminTotpSecret && !config.allowNoTwoFactor) {
 
 if (seedIfEmpty()) console.log('Database was empty — demo data created.')
 
-const app = createApp()
+const app: Express = createApp()
 
 // On Vercel the default export is the entrypoint (src/index.ts); elsewhere start a regular server.
 if (!onVercel) {
