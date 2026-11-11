@@ -1,5 +1,5 @@
-import { createApp } from './app.ts'
-import { config, hasWeakSecrets, isProduction } from './config.ts'
+import { config, hasWeakSecrets, isProduction, onVercel } from './config.ts'
+import { createApp } from './createApp.ts'
 import { seedIfEmpty } from './seed.ts'
 
 if (isProduction && hasWeakSecrets) {
@@ -17,6 +17,13 @@ if (isProduction && !config.adminTotpSecret && !config.allowNoTwoFactor) {
 
 if (seedIfEmpty()) console.log('Database was empty — demo data created.')
 
-createApp().listen(config.port, () => {
-  console.log(`API listening on http://localhost:${config.port}`)
-})
+const app = createApp()
+
+// On Vercel the default export is the entrypoint (src/index.ts); elsewhere start a regular server.
+if (!onVercel) {
+  app.listen(config.port, () => {
+    console.log(`API listening on http://localhost:${config.port}`)
+  })
+}
+
+export default app
