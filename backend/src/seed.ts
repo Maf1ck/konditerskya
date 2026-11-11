@@ -29,22 +29,22 @@ const categories: SeedCategory[] = [
 ]
 
 const products: SeedProduct[] = [
-  { category: 'torty', name: 'Ягідний торт', weight: '1,2 кг', price: 650, image: 'berry-cake.png', popular: true },
-  { category: 'torty', name: 'Ванільний торт з ягодами', weight: '1,2 кг', price: 650, image: 'berry-cake.png', popular: true },
-  { category: 'torty', name: 'Шоколадний торт', weight: '1,4 кг', price: 720, image: 'berry-cake.png' },
-  { category: 'torty', name: 'Медовик', weight: '1,0 кг', price: 540, image: 'berry-cake.png' },
-  { category: 'tistechka', name: 'Тістечко «Картопля»', weight: '4 шт', price: 140, image: 'raspberry-dessert.png' },
-  { category: 'tistechka', name: 'Макаронс', weight: '6 шт', price: 210, image: 'raspberry-dessert.png' },
-  { category: 'ekleri-ta-profiteroli', name: 'Шоколадні еклери', weight: '6 шт', price: 180, image: 'eclairs.png', popular: true },
-  { category: 'ekleri-ta-profiteroli', name: 'Профітролі з шоколадом', weight: '6 шт', price: 180, image: 'eclairs.png' },
-  { category: 'ekleri-ta-profiteroli', name: 'Еклери з ванільним кремом', weight: '6 шт', price: 190, image: 'eclairs.png' },
-  { category: 'chyzkeiky', name: 'Чизкейк з малиною', weight: '150 г', price: 95, image: 'raspberry-dessert.png' },
-  { category: 'chyzkeiky', name: 'Чизкейк Нью-Йорк', weight: '150 г', price: 90, image: 'raspberry-dessert.png' },
-  { category: 'deserty', name: 'Малиновий десерт', weight: '150 г', price: 95, image: 'raspberry-dessert.png', popular: true },
-  { category: 'deserty', name: 'Тірамісу', weight: '150 г', price: 100, image: 'raspberry-dessert.png' },
-  { category: 'pyrohy-ta-kishi', name: 'Кіш з куркою та грибами', weight: '800 г', price: 320, image: 'eclairs.png' },
-  { category: 'pechyvo', name: 'Вівсяне печиво', weight: '300 г', price: 110, image: 'eclairs.png', frozen: false },
-  { category: 'kava-ta-napoi', name: 'Лате', weight: '250 мл', price: 65, image: 'eclairs.png', frozen: false },
+  { category: 'torty', name: 'Ягідний торт', weight: '1,2 кг', price: 650, image: 'berry-cake.jpg', popular: true },
+  { category: 'torty', name: 'Ванільний торт з ягодами', weight: '1,2 кг', price: 650, image: 'berry-cake.jpg', popular: true },
+  { category: 'torty', name: 'Шоколадний торт', weight: '1,4 кг', price: 720, image: 'berry-cake.jpg' },
+  { category: 'torty', name: 'Медовик', weight: '1,0 кг', price: 540, image: 'berry-cake.jpg' },
+  { category: 'tistechka', name: 'Тістечко «Картопля»', weight: '4 шт', price: 140, image: 'raspberry-dessert.jpg' },
+  { category: 'tistechka', name: 'Макаронс', weight: '6 шт', price: 210, image: 'raspberry-dessert.jpg' },
+  { category: 'ekleri-ta-profiteroli', name: 'Шоколадні еклери', weight: '6 шт', price: 180, image: 'eclairs.jpg', popular: true },
+  { category: 'ekleri-ta-profiteroli', name: 'Профітролі з шоколадом', weight: '6 шт', price: 180, image: 'eclairs.jpg' },
+  { category: 'ekleri-ta-profiteroli', name: 'Еклери з ванільним кремом', weight: '6 шт', price: 190, image: 'eclairs.jpg' },
+  { category: 'chyzkeiky', name: 'Чизкейк з малиною', weight: '150 г', price: 95, image: 'raspberry-dessert.jpg' },
+  { category: 'chyzkeiky', name: 'Чизкейк Нью-Йорк', weight: '150 г', price: 90, image: 'raspberry-dessert.jpg' },
+  { category: 'deserty', name: 'Малиновий десерт', weight: '150 г', price: 95, image: 'raspberry-dessert.jpg', popular: true },
+  { category: 'deserty', name: 'Тірамісу', weight: '150 г', price: 100, image: 'raspberry-dessert.jpg' },
+  { category: 'pyrohy-ta-kishi', name: 'Кіш з куркою та грибами', weight: '800 г', price: 320, image: 'eclairs.jpg' },
+  { category: 'pechyvo', name: 'Вівсяне печиво', weight: '300 г', price: 110, image: 'eclairs.jpg', frozen: false },
+  { category: 'kava-ta-napoi', name: 'Лате', weight: '250 мл', price: 65, image: 'eclairs.jpg', frozen: false },
 ]
 
 const pickupPoints = [

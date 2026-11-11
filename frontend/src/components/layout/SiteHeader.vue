@@ -41,9 +41,10 @@ header.header
   transition(name="menu")
     #mobile-menu.menu(v-show="menuOpen")
       .container
-        a.menu__phone(:href="phoneHref(site.settings?.phone ?? '')") {{ site.settings?.phone }}
+        router-link.menu__link(:to="{ name: 'home' }") Головна
         router-link.menu__link(:to="{ name: 'catalog' }") Увесь каталог
         router-link.menu__link(:to="{ name: 'home', hash: '#how' }") Як замовити
+        a.menu__phone(:href="phoneHref(site.settings?.phone ?? '')") {{ site.settings?.phone }}
   category-nav
 </template>
 
@@ -186,6 +187,19 @@ header.header
     padding: $s-12 0;
     font-size: 16px;
     font-weight: 600;
+  }
+
+  // Exact match only, so "Головна" is not highlighted together with "Як замовити" (#how).
+  &__link.router-link-exact-active:not([href*='#']) {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+
+  &__phone {
+    margin-top: $s-4;
+    padding-top: $s-16;
+    border-top: 1px solid $c-line;
+    color: $c-muted;
   }
 }
 </style>

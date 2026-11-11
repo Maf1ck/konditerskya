@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { shopApi } from '@/api/shop'
 import ProductCard from '@/components/ui/ProductCard.vue'
 import SegmentedToggle from '@/components/ui/SegmentedToggle.vue'
@@ -60,6 +60,20 @@ watch(() => props.slug, () => {
 }, { flush: 'sync' })
 watch([() => props.slug, stateFilter, sort], load, { immediate: true })
 
+// Keep the selected category chip visible in the horizontally scrolling row.
+const chipsEl = ref<HTMLElement | null>(null)
+watch(
+  [() => props.slug, () => site.categories.length],
+  async () => {
+    await nextTick()
+    const row = chipsEl.value
+    const active = row?.querySelector<HTMLElement>('.is-active')
+    if (!row || !active) return
+    row.scrollLeft = active.offsetLeft - (row.clientWidth - active.offsetWidth) / 2
+  },
+  { immediate: true },
+)
+
 watch(title, (value) => {
   if (value) document.title = `${value} — ${site.settings?.brandName ?? ''}`
 }, { immediate: true })
@@ -77,28 +91,42 @@ watch(title, (value) => {
       span(aria-hidden="true") /
       span(aria-current="page") {{ title }}
 
-    mixin sort
+    .page__head
+      .page__heading
+        h1.page__title {{ title }}
+        p.page__desc(v-if="category?.description") {{ category.description }}
       label.sort
         span.sort__label Сортування:
         select.sort__select(v-model="sort")
           option(v-for="option in sortOptions" :key="option.value" :value="option.value") {{ option.label }}
 
-    .page__head
-      .page__heading
-        h1.page__title {{ title }}
-        p.page__desc(v-if="category?.description") {{ category.description }}
-      .page__sort-desktop
-        +sort
-
-    //- Phones and tablets: filters stay visible at the top while scrolling
-    .filterbar
-      segmented-toggle(v-model="stateFilter" :options="stateOptions" label="Фільтр за станом" size="sm")
-      +sort
+    //- Phones and tablets: one labelled filter panel above the products (the sidebar is hidden there)
+    section.filters(aria-label="Фільтри товарів")
+      .filters__group.filters__group--wide
+        span.filters__label Категорія
+        .filters__chips(ref="chipsEl")
+          router-link.chip(:to="{ name: 'catalog' }" active-class="is-active") Усі
+          router-link.chip(
+            v-for="item in site.categories"
+            :key="item.id"
+            :to="{ name: 'category', params: { slug: item.slug } }"
+            active-class="is-active"
+          ) {{ item.name }}
+      label.filters__group
+        span.filters__label Сортування
+        span.filters__select-wrap
+          select.filters__select(v-model="sort")
+            option(v-for="option in sortOptions" :key="option.value" :value="option.value") {{ option.label }}
+      .filters__group
+        span.filters__label Стан
+        segmented-toggle(v-model="stateFilter" :options="stateOptions" label="Фільтр за станом" size="sm")
 
     .page__body
       aside.sidebar
         h2.sidebar__heading Категорії
         ul.sidebar__list
+          li
+            router-link.sidebar__link(:to="{ name: 'catalog' }") Усі товари
           li(v-for="item in site.categories" :key="item.id")
             router-link.sidebar__link(
               :to="{ name: 'category', params: { slug: item.slug } }"
@@ -128,13 +156,6 @@ watch(title, (value) => {
     padding-block: $s-16 $s-16;
     @include up($bp-lg) {
       padding-bottom: $s-40;
-    }
-  }
-
-  &__sort-desktop {
-    display: none;
-    @include up($bp-lg) {
-      display: block;
     }
   }
 
@@ -187,46 +208,140 @@ watch(title, (value) => {
   }
 }
 
-.filterbar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: $s-8;
-  margin: 0 calc(var(--gutter) * -1) $s-16;
-  padding: $s-12 var(--gutter);
-  overflow-x: auto;
-  border-block: 1px solid $c-line;
-  background: $c-bg;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
+.filters {
+  display: grid;
+  gap: $s-16;
+  margin-bottom: $s-24;
+  padding: $s-16;
+  border-radius: $r-card;
+  background: $c-card;
+  @include up($bp-md) {
+    grid-template-columns: 1fr auto;
+    gap: $s-20 $s-24;
+    padding: $s-20 $s-24;
+  }
+  @include up($bp-lg) {
     display: none;
   }
 
-  > * {
-    flex-shrink: 0;
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: $s-8;
+    min-width: 0;
+
+    &--wide {
+      grid-column: 1 / -1;
+    }
   }
 
-  // Compact on phones: the word "Сортування:" is dropped so both controls fit in one row.
-  .sort {
-    padding: $s-8 $s-12;
+  &__label {
+    @include eyebrow(12px, 0.12em);
+    color: $c-muted;
+    font-weight: 700;
   }
 
-  .sort__label {
-    @include down($bp-md) {
+  &__chips {
+    display: flex;
+    gap: $s-8;
+    margin-inline: -$s-16;
+    padding-inline: $s-16;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    @include up($bp-md) {
+      flex-wrap: wrap;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+
+    &::-webkit-scrollbar {
       display: none;
     }
   }
 
-  @include up($bp-lg) {
-    display: none;
+  &__select-wrap {
+    position: relative;
+    display: block;
+
+    // Chevron drawn with borders so it follows the brand ink color.
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: $s-20;
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid $c-ink;
+      border-bottom: 2px solid $c-ink;
+      transform: translateY(-70%) rotate(45deg);
+      pointer-events: none;
+    }
+  }
+
+  &__select {
+    width: 100%;
+    padding: $s-12 $s-48 $s-12 $s-16;
+    border: 1px solid $c-line;
+    border-radius: $r-pill;
+    background: $c-bg;
+    font-size: 15px;
+    font-weight: 600;
+    appearance: none;
+    cursor: pointer;
+    @include up($bp-md) {
+      min-width: 260px;
+    }
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+  }
+
+  // The state toggle fills the row on phones so each option is an easy tap target.
+  :deep(.toggle) {
+    display: flex;
+    @include up($bp-md) {
+      display: inline-flex;
+    }
+  }
+
+  :deep(.toggle__option) {
+    flex: 1;
+    padding-block: 10px;
+  }
+}
+
+.chip {
+  flex-shrink: 0;
+  padding: $s-8 $s-16;
+  border: 1px solid $c-line;
+  border-radius: $r-pill;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s,
+    color 0.2s;
+
+  @include hover-only {
+    border-color: $c-ink;
+  }
+
+  &.is-active {
+    border-color: $c-ink;
+    background: $c-ink;
+    color: $c-bg;
+    font-weight: 700;
   }
 }
 
 .sort {
-  display: inline-flex;
+  display: none;
+  @include up($bp-lg) {
+    display: inline-flex;
+  }
   align-items: center;
   gap: $s-8;
   padding: $s-12 $s-20;

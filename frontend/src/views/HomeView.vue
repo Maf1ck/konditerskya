@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { shopApi } from '@/api/shop'
-import heroImage from '@/assets/images/hero.png'
+import heroImage from '@/assets/images/hero.jpg'
 import AppButton from '@/components/ui/AppButton.vue'
 import CategoryTile from '@/components/ui/CategoryTile.vue'
 import ProductCard from '@/components/ui/ProductCard.vue'
@@ -42,7 +42,7 @@ section.hero
         app-button(variant="accent" :to="{ name: 'catalog' }") Переглянути каталог
         app-button(variant="outline-light" :to="{ name: 'home', hash: '#how' }") Як замовити
     .hero__photo
-      img(:src="heroImage" alt="Вітрина кондитерської: торти, еклери та десерти" width="1120" height="920")
+      img(:src="heroImage" alt="Вітрина кондитерської: торти, еклери та десерти" width="1280" height="1024" fetchpriority="high")
 
 section.section(v-if="site.categories.length" aria-labelledby="catalog-title")
   .container

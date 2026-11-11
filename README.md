@@ -82,7 +82,7 @@ Bindings не потрібні: фронтенд — статичний і хо�
 | Адреси самовивозу (число `N` у тексті береться автоматично) | Адмінка → «Точки самовивозу» |
 | Кольори бренду | CSS-змінні `--c-*` у `frontend/src/styles/global.scss` |
 | Шрифти | `frontend/index.html` + `$font-serif` / `$font-sans` у `frontend/src/styles/_tokens.scss` |
-| Hero-фото | `frontend/src/assets/images/hero.png` |
+| Hero-фото (JPEG/WebP до ~300 КБ) | `frontend/src/assets/images/hero.jpg` |
 
 ## API
 

@@ -1,11 +1,17 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useSiteStore } from '@/stores/site'
 
 const site = useSiteStore()
+const route = useRoute()
+
+// Catalog pages have their own category chips in the filter panel on smaller screens.
+const inCatalog = computed(() => route.name === 'catalog' || route.name === 'category')
 </script>
 
 <template lang="pug">
-nav.cat-nav(aria-label="Категорії")
+nav.cat-nav(aria-label="Категорії" :class="{ 'cat-nav--in-catalog': inCatalog }")
   ul.cat-nav__list
     li(v-for="category in site.categories" :key="category.id")
       router-link.cat-nav__link(:to="{ name: 'category', params: { slug: category.slug } }") {{ category.name }}
@@ -14,6 +20,12 @@ nav.cat-nav(aria-label="Категорії")
 <style lang="scss" scoped>
 .cat-nav {
   border-bottom: 1px solid $c-line;
+
+  &--in-catalog {
+    @include down($bp-lg) {
+      display: none;
+    }
+  }
 
   &__list {
     display: flex;

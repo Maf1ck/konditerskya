@@ -88,6 +88,12 @@ function ensureColumn(table: string, column: string, definition: string): void {
 ensureColumn('categories', 'description', "TEXT NOT NULL DEFAULT ''")
 ensureColumn('categories', 'image_url', "TEXT NOT NULL DEFAULT ''")
 
+// Demo photos were converted from heavy PNG to JPEG; repoint databases seeded earlier.
+for (const table of ['products', 'categories']) {
+  db.exec(`UPDATE ${table} SET image_url = substr(image_url, 1, length(image_url) - 4) || '.jpg'
+    WHERE image_url LIKE '/demo/%.png'`)
+}
+
 /** Runs `fn` inside a transaction and rolls back on any error. */
 export function transaction<T>(fn: () => T): T {
   db.exec('BEGIN')
