@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import AppLogo from '@/components/ui/AppLogo.vue'
+import InstallAppButton from '@/components/ui/InstallAppButton.vue'
 import { useSiteStore } from '@/stores/site'
 
 const site = useSiteStore()
@@ -21,6 +22,7 @@ footer.footer
       .footer__about
         app-logo(light)
         p.footer__about-text {{ site.settings?.footerAbout }}
+        install-app-button(tone="dark")
       nav.footer__col(aria-label="Каталог")
         h2.footer__heading Каталог
         router-link.footer__link(

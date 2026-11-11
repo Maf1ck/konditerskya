@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import AppLogo from '@/components/ui/AppLogo.vue'
 import CategoryNav from '@/components/layout/CategoryNav.vue'
 import InfoBar from '@/components/layout/InfoBar.vue'
+import InstallAppButton from '@/components/ui/InstallAppButton.vue'
 import { useCartStore } from '@/stores/cart'
 import { useSiteStore } from '@/stores/site'
 
@@ -45,6 +46,7 @@ header.header
         router-link.menu__link(:to="{ name: 'catalog' }") Увесь каталог
         router-link.menu__link(:to="{ name: 'home', hash: '#how' }") Як замовити
         a.menu__phone(:href="phoneHref(site.settings?.phone ?? '')") {{ site.settings?.phone }}
+        install-app-button.menu__install
   category-nav
 </template>
 
@@ -200,6 +202,10 @@ header.header
     padding-top: $s-16;
     border-top: 1px solid $c-line;
     color: $c-muted;
+  }
+
+  &__install {
+    padding-block: $s-8 $s-4;
   }
 }
 </style>

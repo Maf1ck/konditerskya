@@ -49,6 +49,17 @@ Bindings не потрібні: фронтенд — статичний і хо�
 > Для реальної роботи потрібна зовнішня БД (наприклад Turso/libSQL або Neon Postgres) і сховище фото (Vercel Blob).
 > Для одного сервера/VPS (`pnpm build` + `pnpm start`) цих обмежень немає.
 
+## Застосунок на телефон (PWA)
+
+Сайт можна встановити як застосунок, без Google Play чи App Store: іконка на екрані, відкривається на весь екран.
+
+- Android / Chrome / Edge: кнопка «Встановити застосунок» у бургер-меню та у футері (або пункт «Встановити» в меню браузера).
+- iPhone / iPad: кнопка показує підказку: Safari → «Поділитися» → «На екран „Додому“».
+- Офлайн: сторінки, фото й каталог беруться з кешу, коли немає мережі; замовлення й адмінка завжди йдуть у мережу.
+- Працює лише через HTTPS (або `localhost`) і лише в production-збірці: у `pnpm dev` service worker не реєструється.
+- Файли: `frontend/public/manifest.webmanifest`, `frontend/public/sw.js`, іконки в `frontend/public/icons/`.
+  Після зміни `sw.js` збільште `VERSION` у ньому, щоб скинути старий кеш.
+
 ## Куди приходять замовлення
 
 1. Завжди — в адмінку `/admin` → «Замовлення» (список оновлюється кожні 30 с, нові підсвічені, у вкладці лічильник).
@@ -83,6 +94,8 @@ Bindings не потрібні: фронтенд — статичний і хо�
 | Кольори бренду | CSS-змінні `--c-*` у `frontend/src/styles/global.scss` |
 | Шрифти | `frontend/index.html` + `$font-serif` / `$font-sans` у `frontend/src/styles/_tokens.scss` |
 | Hero-фото (JPEG/WebP до ~300 КБ) | `frontend/src/assets/images/hero.jpg` |
+| Назва застосунку, кольори | `frontend/public/manifest.webmanifest` (+ `apple-mobile-web-app-title` і `theme-color` в `frontend/index.html`) |
+| Іконки застосунку (зараз placeholder «К») | `frontend/public/icons/`: 192, 512, maskable 512 (логотип у центральних 80%), `apple-touch-icon` 180 |
 
 ## API
 
