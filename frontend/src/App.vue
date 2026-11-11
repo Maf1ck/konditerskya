@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import FloatingCart from '@/components/layout/FloatingCart.vue'
 import SiteFooter from '@/components/layout/SiteFooter.vue'
 import SiteHeader from '@/components/layout/SiteHeader.vue'
 import { useSiteStore } from '@/stores/site'
@@ -23,6 +24,7 @@ template(v-else)
       transition(name="page" mode="out-in")
         component(:is="Component" :key="current.path")
   site-footer(v-if="site.loaded && !site.error")
+  floating-cart
 </template>
 
 <style lang="scss" scoped>
